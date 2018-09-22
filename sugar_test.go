@@ -168,6 +168,10 @@ func TestParseValues6_1(t *testing.T) {
 	if result.HasError() {
 		t.Error("Not expecting error")
 	}
+	if result.HumanReadableError() != nil {
+		t.Error("Did not have human readable error")
+		return
+	}
 	if output.Field1 == nil || *output.Field1 != 3.14 {
 		t.Error("The parsing was incorrect", output.Field1)
 	}
@@ -201,6 +205,10 @@ func TestParseValues7_1(t *testing.T) {
 		t.Error("Did not have error")
 		return
 	}
+	if result.HumanReadableError() == nil {
+		t.Error("Did not have human readable error")
+		return
+	}
 	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 1 {
 		t.Error("Error counts were not right", result.ExtraFieldErrors, result.ValidationErrors, result.ParseErrors)
 		return
@@ -221,6 +229,10 @@ func TestParseValues7_2(t *testing.T) {
 		t.Error("Did not have error")
 		return
 	}
+	if result.HumanReadableError() == nil {
+		t.Error("Did not have human readable error")
+		return
+	}
 	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 1 {
 		t.Error("Error counts were not right", result.ExtraFieldErrors, result.ValidationErrors, result.ParseErrors)
 		return
@@ -239,6 +251,10 @@ func TestParseValues7_3(t *testing.T) {
 	result := sugar.ParseValues(input, &output)
 	if !result.HasError() {
 		t.Error("Did not have error")
+		return
+	}
+	if result.HumanReadableError() == nil {
+		t.Error("Did not have human readable error")
 		return
 	}
 	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 1 {
@@ -269,6 +285,10 @@ func TestParseValues8_1(t *testing.T) {
 		t.Error("Did not have error")
 		return
 	}
+	if result.HumanReadableError() == nil {
+		t.Error("Did not have human readable error")
+		return
+	}
 	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 1 {
 		t.Error("Error counts were not right", result.ExtraFieldErrors, result.ValidationErrors, result.ParseErrors)
 		return
@@ -295,6 +315,10 @@ func TestParseValues9_1(t *testing.T) {
 	result := sugar.ParseValues(input, &output)
 	if !result.HasError() {
 		t.Error("Did not have error")
+		return
+	}
+	if result.HumanReadableError() == nil {
+		t.Error("Did not have human readable error")
 		return
 	}
 	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 1 {
@@ -324,6 +348,10 @@ func TestParseValues10_1(t *testing.T) {
 	result := sugar.ParseValues(input, &output)
 	if !result.HasError() {
 		t.Error("Did not have error")
+		return
+	}
+	if result.HumanReadableError() == nil {
+		t.Error("Did not have human readable error")
 		return
 	}
 	if len(result.ExtraFieldErrors) != 1 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 0 {
@@ -356,6 +384,10 @@ func TestParseValues11_1(t *testing.T) {
 	result := sugar.ParseValues(input, &output)
 	if !result.HasError() {
 		t.Error("Did not have error")
+		return
+	}
+	if result.HumanReadableError() == nil {
+		t.Error("Did not have human readable error")
 		return
 	}
 	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 1 || len(result.ParseErrors) != 0 {
