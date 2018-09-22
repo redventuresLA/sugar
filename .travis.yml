@@ -18,5 +18,5 @@ script:
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
-#notifications:
-#  slack: redventures:nRLcin8Tnl6dDZN08gacrOyS
+notifications:
+  slack: redventures:nRLcin8Tnl6dDZN08gacrOyS
