@@ -1,22 +1,25 @@
 package sugar
 
+// Response The response from a validation of url values from sugar
 type Response struct {
-	FieldErrors []FieldError
+	FieldErrors      []FieldError
 	ExtraFieldErrors []ExtraFieldError
 	ValidationErrors []ValidationError
 }
 
+// HasError Specifies whether the validation failed. In this case, you most likely want to return a 400 level status
+// code.
 func (r Response) HasError() bool {
 	return len(r.FieldErrors) > 0 || len(r.ExtraFieldErrors) > 0
 }
 
 type ValidationError struct {
-	Field string
+	Field  string
 	Reason string
 }
 
 type FieldError struct {
-	Field string
+	Field  string
 	Reason string
 }
 
