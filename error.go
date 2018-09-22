@@ -1,6 +1,6 @@
 package sugar
 
-// Response The response from a validation of url values from sugar
+// Response The response from a validation of url values from sugar.
 type Response struct {
 	FieldErrors      []FieldError
 	ExtraFieldErrors []ExtraFieldError
@@ -13,16 +13,19 @@ func (r Response) HasError() bool {
 	return len(r.FieldErrors) > 0 || len(r.ExtraFieldErrors) > 0
 }
 
+// ValidationError An error arising from validation using the Sugarable.Validate method.
 type ValidationError struct {
 	Field  string
 	Reason string
 }
 
+// FieldError An error arising from
 type FieldError struct {
 	Field  string
 	Reason string
 }
 
+// ExtraFieldError An error arising from the user including an extra field in the request that was not expected.
 type ExtraFieldError struct {
 	Field string
 }

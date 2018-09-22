@@ -12,7 +12,7 @@ func ParseValues(input url.Values, output Sugarable) Response {
 	elem := reflect.ValueOf(output).Elem()
 	typeOfOutput := elem.Type()
 
-	handledUrlValues := make(map[string]bool)
+	handledURLValues := make(map[string]bool)
 
 	for i := 0; i < elem.NumField(); i++ {
 
@@ -21,7 +21,7 @@ func ParseValues(input url.Values, output Sugarable) Response {
 
 		fieldName := getFieldName(structField)
 
-		handledUrlValues[fieldName] = true
+		handledURLValues[fieldName] = true
 
 		rawInput := input.Get(fieldName)
 
@@ -40,7 +40,7 @@ func ParseValues(input url.Values, output Sugarable) Response {
 	}
 
 	for key := range input {
-		if _, exists := handledUrlValues[key]; !exists {
+		if _, exists := handledURLValues[key]; !exists {
 			r.addExtraFieldError(key)
 		}
 	}
