@@ -2,7 +2,7 @@ package sugar
 
 // Response The response from a validation of url values from sugar.
 type Response struct {
-	FieldErrors      []FieldError
+	ParseErrors      []ParseError
 	ExtraFieldErrors []ExtraFieldError
 	ValidationErrors []ValidationError
 }
@@ -10,7 +10,7 @@ type Response struct {
 // HasError Specifies whether the validation failed. In this case, you most likely want to return a 400 level status
 // code.
 func (r Response) HasError() bool {
-	return len(r.FieldErrors) > 0 || len(r.ExtraFieldErrors) > 0
+	return len(r.ParseErrors) > 0 || len(r.ExtraFieldErrors) > 0 || len(r.ValidationErrors) > 0
 }
 
 // ValidationError An error arising from validation using the Sugarable.Validate method.
@@ -19,8 +19,8 @@ type ValidationError struct {
 	Reason string
 }
 
-// FieldError An error arising from
-type FieldError struct {
+// ParseError An error arising from invalid parsing of the input values
+type ParseError struct {
 	Field  string
 	Reason string
 }
@@ -30,10 +30,10 @@ type ExtraFieldError struct {
 	Field string
 }
 
-func (r Response) addFieldError(field string, reason string) {
-	r.FieldErrors = append(r.FieldErrors, FieldError{Field: field, Reason: reason})
+func (r *Response) addFieldError(field string, reason string) {
+	r.ParseErrors = append(r.ParseErrors, ParseError{Field: field, Reason: reason})
 }
 
-func (r Response) addExtraFieldError(field string) {
+func (r *Response) addExtraFieldError(field string) {
 	r.ExtraFieldErrors = append(r.ExtraFieldErrors, ExtraFieldError{Field: field})
 }

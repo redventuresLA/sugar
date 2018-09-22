@@ -5,6 +5,7 @@ import (
 	"reflect"
 )
 
+// ParseValues Parses the input http body or query params into your output struct.
 func ParseValues(input url.Values, output Sugarable) Response {
 
 	r := Response{}

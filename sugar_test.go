@@ -184,3 +184,186 @@ func TestParseValues6_2(t *testing.T) {
 		t.Error("The parsing was incorrect", output.Field1)
 	}
 }
+
+type testType7 struct {
+	Field1 int `sugar:"field_1"`
+}
+
+func (tt testType7) Validate() []sugar.ValidationError {
+	return nil
+}
+
+func TestParseValues7_1(t *testing.T) {
+	output := testType7{}
+	input := GetUrlValues(map[string]string{})
+	result := sugar.ParseValues(input, &output)
+	if !result.HasError() {
+		t.Error("Did not have error")
+		return
+	}
+	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 1 {
+		t.Error("Error counts were not right", result.ExtraFieldErrors, result.ValidationErrors, result.ParseErrors)
+		return
+	}
+	e := result.ParseErrors[0]
+	if e.Field != "field_1" || e.Reason != sugar.FieldMissingID {
+		t.Error("Error was wrong type")
+	}
+}
+
+func TestParseValues7_2(t *testing.T) {
+	output := testType7{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "something",
+	})
+	result := sugar.ParseValues(input, &output)
+	if !result.HasError() {
+		t.Error("Did not have error")
+		return
+	}
+	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 1 {
+		t.Error("Error counts were not right", result.ExtraFieldErrors, result.ValidationErrors, result.ParseErrors)
+		return
+	}
+	e := result.ParseErrors[0]
+	if e.Field != "field_1" || e.Reason != sugar.ValidateFailedID {
+		t.Error("Error was wrong type")
+	}
+}
+
+func TestParseValues7_3(t *testing.T) {
+	output := testType7{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "4.223",
+	})
+	result := sugar.ParseValues(input, &output)
+	if !result.HasError() {
+		t.Error("Did not have error")
+		return
+	}
+	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 1 {
+		t.Error("Error counts were not right", result.ExtraFieldErrors, result.ValidationErrors, result.ParseErrors)
+		return
+	}
+	e := result.ParseErrors[0]
+	if e.Field != "field_1" || e.Reason != sugar.ValidateFailedID {
+		t.Error("Error was wrong type")
+	}
+}
+
+type testType8 struct {
+	field1 *float64
+}
+
+func (tt testType8) Validate() []sugar.ValidationError {
+	return nil
+}
+
+func TestParseValues8_1(t *testing.T) {
+	output := testType8{}
+	input := GetUrlValues(map[string]string{
+		"field1": "something",
+	})
+	result := sugar.ParseValues(input, &output)
+	if !result.HasError() {
+		t.Error("Did not have error")
+		return
+	}
+	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 1 {
+		t.Error("Error counts were not right", result.ExtraFieldErrors, result.ValidationErrors, result.ParseErrors)
+		return
+	}
+	e := result.ParseErrors[0]
+	if e.Field != "field1" || e.Reason != sugar.ValidateFailedID {
+		t.Error("Error was wrong type", e.Field, e.Reason)
+	}
+}
+
+type testType9 struct {
+	Field1 byte `sugar:"field_1"`
+}
+
+func (tt testType9) Validate() []sugar.ValidationError {
+	return nil
+}
+
+func TestParseValues9_1(t *testing.T) {
+	output := testType9{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "something",
+	})
+	result := sugar.ParseValues(input, &output)
+	if !result.HasError() {
+		t.Error("Did not have error")
+		return
+	}
+	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 1 {
+		t.Error("Error counts were not right", result.ExtraFieldErrors, result.ValidationErrors, result.ParseErrors)
+		return
+	}
+	e := result.ParseErrors[0]
+	if e.Field != "field_1" || e.Reason != sugar.ValidateFailedID {
+		t.Error("Error was wrong type", e.Field, e.Reason)
+	}
+}
+
+type testType10 struct {
+	Field1 string `sugar:"field_1"`
+}
+
+func (tt testType10) Validate() []sugar.ValidationError {
+	return nil
+}
+
+func TestParseValues10_1(t *testing.T) {
+	output := testType10{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "something",
+		"field_2": "extra!",
+	})
+	result := sugar.ParseValues(input, &output)
+	if !result.HasError() {
+		t.Error("Did not have error")
+		return
+	}
+	if len(result.ExtraFieldErrors) != 1 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 0 {
+		t.Error("Error counts were not right", result.ExtraFieldErrors, result.ValidationErrors, result.ParseErrors)
+		return
+	}
+	e := result.ExtraFieldErrors[0]
+	if e.Field != "field_2" {
+		t.Error("Error was wrong field", e.Field)
+	}
+}
+
+type testType11 struct {
+	Field1 string `sugar:"field_1"`
+}
+
+func (tt testType11) Validate() []sugar.ValidationError {
+	e := sugar.ValidationError{
+		Field:  "field_1",
+		Reason: "My Reason",
+	}
+	return []sugar.ValidationError{e}
+}
+
+func TestParseValues11_1(t *testing.T) {
+	output := testType11{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "something",
+	})
+	result := sugar.ParseValues(input, &output)
+	if !result.HasError() {
+		t.Error("Did not have error")
+		return
+	}
+	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 1 || len(result.ParseErrors) != 0 {
+		t.Error("Error counts were not right", result.ExtraFieldErrors, result.ValidationErrors, result.ParseErrors)
+		return
+	}
+	e := result.ValidationErrors[0]
+	if e.Field != "field_1" || e.Reason != "My Reason" {
+		t.Error("Error was wrong field", e.Field)
+	}
+}
