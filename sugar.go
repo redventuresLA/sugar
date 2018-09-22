@@ -27,19 +27,14 @@ func ParseValues(input url.Values, output Sugarable) Response {
 
 		if rawInput == "" {
 			if valueField.Kind() != reflect.Ptr {
-				r.addFieldError(fieldName, FIELD_MISSING_ID)
+				r.addFieldError(fieldName, FieldMissingID)
 			}
-			continue
-		}
-
-		if !valueField.CanSet() {
-			r.addFieldError(fieldName, SERVER_ERROR_ID)
 			continue
 		}
 
 		ok := parseInputToType(rawInput, valueField)
 		if !ok {
-			r.addFieldError(fieldName, VALIDATE_FAILED_ID)
+			r.addFieldError(fieldName, ValidateFailedID)
 			continue
 		}
 	}

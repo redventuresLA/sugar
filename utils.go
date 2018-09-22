@@ -62,7 +62,6 @@ func getFieldName(sf reflect.StructField) string {
 	tag := sf.Tag.Get("sugar")
 	if tag == "" {
 		return sf.Name
-	} else {
-		return tag
 	}
+	return tag
 }

@@ -1,9 +1,9 @@
 package sugar
 
 const (
-	FIELD_MISSING_ID = "field_missing"
+	// FieldMissingID The user excluded a required field from the request.
+	FieldMissingID = "field_missing"
 
-	SERVER_ERROR_ID = "server_error"
-
-	VALIDATE_FAILED_ID = "validation_failed"
+	// ValidateFailedID Validation failed on the field for the request.
+	ValidateFailedID = "validation_failed"
 )
