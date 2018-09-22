@@ -20,7 +20,7 @@ func (r Response) HumanReadableError() map[string]interface{} {
 		for _, parseError := range r.ParseErrors {
 			parseErrorsOutput = append(parseErrorsOutput, parseError.humanReadable())
 		}
-		output["parse_errors"] = map[string]interface{} {
+		output["parse_errors"] = map[string]interface{}{
 			"errors": parseErrorsOutput,
 			"action": "make sure that your input has the correct data type and that it is included.",
 		}
@@ -30,7 +30,7 @@ func (r Response) HumanReadableError() map[string]interface{} {
 		for _, validationError := range r.ValidationErrors {
 			validationErrorsOutput = append(validationErrorsOutput, validationError.humanReadable())
 		}
-		output["validation_errors"] = map[string]interface{} {
+		output["validation_errors"] = map[string]interface{}{
 			"errors": validationErrorsOutput,
 			"action": "check your request to make sure you don't send invalid parameters",
 		}
@@ -40,7 +40,7 @@ func (r Response) HumanReadableError() map[string]interface{} {
 		for _, extraFieldError := range r.ExtraFieldErrors {
 			extraFieldErrorsOutput = append(extraFieldErrorsOutput, extraFieldError.humanReadable())
 		}
-		output["extra_field_errors"] = map[string]interface{} {
+		output["extra_field_errors"] = map[string]interface{}{
 			"errors": extraFieldErrorsOutput,
 			"action": "don't send this field in future requests. It is unexpected.",
 		}
@@ -61,8 +61,8 @@ type ValidationError struct {
 }
 
 func (ve ValidationError) humanReadable() map[string]interface{} {
-	return map[string]interface{} {
-		"field": ve.Field,
+	return map[string]interface{}{
+		"field":  ve.Field,
 		"reason": ve.Reason,
 	}
 }
@@ -74,8 +74,8 @@ type ParseError struct {
 }
 
 func (pe ParseError) humanReadable() map[string]interface{} {
-	return map[string]interface{} {
-		"field": pe.Field,
+	return map[string]interface{}{
+		"field":  pe.Field,
 		"reason": pe.Reason,
 	}
 }
@@ -86,7 +86,7 @@ type ExtraFieldError struct {
 }
 
 func (efe ExtraFieldError) humanReadable() map[string]interface{} {
-	return map[string]interface{} {
+	return map[string]interface{}{
 		"field": efe.Field,
 	}
 }
