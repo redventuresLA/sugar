@@ -14,6 +14,7 @@ func (r Response) HumanReadableError() map[string]interface{} {
 		return nil
 	}
 	output := make(map[string]interface{})
+	output["description"] = "Errors validating input parameters"
 	if len(r.ParseErrors) > 0 {
 		parseErrorsOutput := make([]map[string]interface{}, 0)
 		for _, parseError := range r.ParseErrors {
@@ -21,7 +22,7 @@ func (r Response) HumanReadableError() map[string]interface{} {
 		}
 		output["parse_errors"] = map[string]interface{} {
 			"errors": parseErrorsOutput,
-			"action": "make sure that your input has the correct data type",
+			"action": "make sure that your input has the correct data type and that it is included.",
 		}
 	}
 	if len(r.ValidationErrors) > 0 {
@@ -41,7 +42,7 @@ func (r Response) HumanReadableError() map[string]interface{} {
 		}
 		output["extra_field_errors"] = map[string]interface{} {
 			"errors": extraFieldErrorsOutput,
-			"action": "Don't send this field in future requests. It is unexpected.",
+			"action": "don't send this field in future requests. It is unexpected.",
 		}
 	}
 	return output
