@@ -1,9 +1,10 @@
 package sugar_test
 
 import (
-	"github.com/redventuresLA/sugar"
 	"net/url"
 	"testing"
+
+	"github.com/redventuresLA/sugar"
 )
 
 func GetUrlValues(input map[string]string) url.Values {
