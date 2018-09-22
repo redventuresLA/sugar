@@ -1,6 +1,10 @@
 sudo: required
 language: go
 
+env:
+  global:
+    - CC_TEST_REPORTER_ID=9ed06b5a8403598cb61e4fc92a08c902de1b0aad8ba3ab17ab0bbce1551d0c79
+
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
