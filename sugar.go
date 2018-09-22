@@ -9,7 +9,7 @@ func ParseValues(input url.Values, output Sugarable) Response {
 
 	r := Response{}
 
-	elem := reflect.ValueOf(output)
+	elem := reflect.ValueOf(output).Elem()
 	typeOfOutput := elem.Type()
 
 	handledUrlValues := make(map[string]bool)
@@ -26,21 +26,22 @@ func ParseValues(input url.Values, output Sugarable) Response {
 		rawInput := input.Get(fieldName)
 
 		if rawInput == "" {
-			r.addFieldError(fieldName, FIELD_MISSING_ID)
+			if valueField.Kind() != reflect.Ptr {
+				r.addFieldError(fieldName, FIELD_MISSING_ID)
+			}
 			continue
 		}
+
 		if !valueField.CanSet() {
-			// In this case, the output interface has an unexpected type
 			r.addFieldError(fieldName, SERVER_ERROR_ID)
 			continue
 		}
-		parsedInput, ok := parseInputToType(rawInput, valueField.Type())
+
+		ok := parseInputToType(rawInput, valueField)
 		if !ok {
 			r.addFieldError(fieldName, VALIDATE_FAILED_ID)
 			continue
 		}
-
-		valueField.Set(reflect.ValueOf(parsedInput))
 	}
 
 	for key := range input {

@@ -5,18 +5,31 @@ import (
 	"strconv"
 )
 
-func parseInputToType(input string, t reflect.Type) (interface{}, bool) {
-	switch name := t.Name(); name {
+func parseInputToType(input string, t reflect.Value) bool {
+	switchType := t.Type()
+	if switchType.Kind() == reflect.Ptr {
+		switchType = switchType.Elem()
+	}
+
+	switch name := switchType.Name(); name {
 	case "int":
-		return parseStringToInt(input)
+		return handleParseInt(input, t)
 	default:
-		return 0, false
+		return false
 	}
 }
 
-func parseStringToInt(input string) (int, bool) {
+func handleParseInt(input string, v reflect.Value) bool {
 	i, e := strconv.Atoi(input)
-	return i, e == nil
+	if e != nil {
+		return false
+	}
+	if v.Kind() == reflect.Ptr {
+		v.Set(reflect.ValueOf(&i))
+	} else {
+		v.Set(reflect.ValueOf(i))
+	}
+	return true
 }
 
 func getFieldName(sf reflect.StructField) string {
