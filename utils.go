@@ -3,12 +3,18 @@ package sugar
 import (
 	"reflect"
 	"strconv"
+	"strings"
 )
 
 func parseInputToType(input string, t reflect.Value) bool {
 	switchType := t.Type()
 	if switchType.Kind() == reflect.Ptr {
 		switchType = switchType.Elem()
+	} else if switchType.Kind() == reflect.Slice {
+		switchType = switchType.Elem()
+		if switchType.Name() != "string" {
+			return false
+		}
 	}
 
 	switch name := switchType.Name(); name {
@@ -39,6 +45,9 @@ func handleParseInt(input string, v reflect.Value) bool {
 func handleParseString(input string, v reflect.Value) bool {
 	if v.Kind() == reflect.Ptr {
 		v.Set(reflect.ValueOf(&input))
+	} else if v.Kind() == reflect.Slice {
+		output := strings.Split(input, ",")
+		v.Set(reflect.ValueOf(output))
 	} else {
 		v.Set(reflect.ValueOf(input))
 	}
