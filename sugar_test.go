@@ -399,3 +399,23 @@ func TestParseValues11_1(t *testing.T) {
 		t.Error("Error was wrong field", e.Field)
 	}
 }
+
+type testType12 struct {
+	Field1 []string `sugar:"field_1"`
+}
+
+func (tt testType12) Validate() []sugar.ValidationError {
+	return nil
+}
+
+func TestParseValues12_1(t *testing.T) {
+	output := testType12{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "red,blue,green",
+	})
+	result := sugar.ParseValues(input, &output)
+	if result.HasError() {
+		t.Error("Should not have error")
+		return
+	}
+}
