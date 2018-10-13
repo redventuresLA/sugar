@@ -12,6 +12,9 @@ func parseInputToType(input string, t reflect.Value) bool {
 		switchType = switchType.Elem()
 	} else if switchType.Kind() == reflect.Slice {
 		switchType = switchType.Elem()
+		if switchType.Name() != "string" {
+			return false
+		}
 	}
 
 	switch name := switchType.Name(); name {

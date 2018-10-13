@@ -418,4 +418,36 @@ func TestParseValues12_1(t *testing.T) {
 		t.Error("Should not have error")
 		return
 	}
+	if len(output.Field1) != 3 {
+		t.Error("Wrong length")
+		return
+	}
+	if output.Field1[0] != "red" {
+		t.Error("should be red")
+	}
+	if output.Field1[1] != "blue" {
+		t.Error("should be blue")
+	}
+	if output.Field1[2] != "green" {
+		t.Error("should be green")
+	}
+}
+
+type testType13 struct {
+	Field1 []int `sugar:"field_1"`
+}
+
+func (tt testType13) Validate() []sugar.ValidationError {
+	return nil
+}
+
+func TestParseValues13_1(t *testing.T) {
+	output := testType13{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "1,2,3",
+	})
+	result := sugar.ParseValues(input, &output)
+	if !result.HasError() {
+		t.Error("should have error")
+	}
 }
