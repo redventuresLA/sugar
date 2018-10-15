@@ -433,6 +433,22 @@ func TestParseValues12_1(t *testing.T) {
 	}
 }
 
+func TestParseValues12_2(t *testing.T) {
+	output := testType12{}
+	input := GetUrlValues(map[string]string{})
+	result := sugar.ParseValues(input, &output)
+	if result.HasError() {
+		t.Error("should not have error")
+		return
+	}
+	if len(output.Field1) != 0 {
+		t.Error("Should hve 0 length")
+	}
+	if output.Field1 != nil {
+		t.Error("Should be nil")
+	}
+}
+
 type testType13 struct {
 	Field1 []int `sugar:"field_1"`
 }

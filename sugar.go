@@ -27,7 +27,7 @@ func ParseValues(input url.Values, output Sugarable) Response {
 		rawInput := input.Get(fieldName)
 
 		if rawInput == "" {
-			if valueField.Kind() != reflect.Ptr {
+			if valueField.Kind() != reflect.Ptr && valueField.Kind() != reflect.Slice {
 				r.addFieldError(fieldName, FieldMissingID)
 			}
 			continue
