@@ -7,7 +7,7 @@ import (
 )
 
 func parsePrimitive(input string, v reflect.Value, name string) bool {
-	switch name{
+	switch name {
 	case intType:
 		return handleParseInt(input, v)
 	case stringType:
