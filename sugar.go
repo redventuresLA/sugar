@@ -3,6 +3,8 @@ package sugar
 import (
 	"net/url"
 	"reflect"
+
+	"github.com/redventuresLA/sugar/parser"
 )
 
 // ParseValues Parses the input http body or query params into your output struct.
@@ -33,7 +35,7 @@ func ParseValues(input url.Values, output Sugarable) Response {
 			continue
 		}
 
-		ok := parseInputToType(rawInput, valueField)
+		ok := parser.ParseInputToType(rawInput, valueField)
 		if !ok {
 			r.addFieldError(fieldName, ValidateFailedID)
 			continue
@@ -53,4 +55,12 @@ func ParseValues(input url.Values, output Sugarable) Response {
 	r.ValidationErrors = output.Validate()
 
 	return r
+}
+
+func getFieldName(sf reflect.StructField) string {
+	tag := sf.Tag.Get("sugar")
+	if tag == "" {
+		return sf.Name
+	}
+	return tag
 }

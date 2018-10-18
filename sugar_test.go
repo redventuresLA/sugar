@@ -415,7 +415,7 @@ func TestParseValues12_1(t *testing.T) {
 	})
 	result := sugar.ParseValues(input, &output)
 	if result.HasError() {
-		t.Error("Should not have error")
+		t.Error("Should not have error", result)
 		return
 	}
 	if len(output.Field1) != 3 {
@@ -463,7 +463,13 @@ func TestParseValues13_1(t *testing.T) {
 		"field_1": "1,2,3",
 	})
 	result := sugar.ParseValues(input, &output)
-	if !result.HasError() {
-		t.Error("should have error")
+	if result.HasError() {
+		t.Error("should not have error")
+	}
+	if len(output.Field1) != 3 {
+		t.Error("Invalid response")
+	}
+	if output.Field1[0] != 1 || output.Field1[1] != 2 || output.Field1[2] != 3 {
+		t.Error("The fields were parsed incorrectly")
 	}
 }

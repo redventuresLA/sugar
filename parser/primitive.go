@@ -1,4 +1,4 @@
-package sugar
+package parser
 
 import (
 	"reflect"
@@ -6,24 +6,14 @@ import (
 	"strings"
 )
 
-func parseInputToType(input string, t reflect.Value) bool {
-	switchType := t.Type()
-	if switchType.Kind() == reflect.Ptr {
-		switchType = switchType.Elem()
-	} else if switchType.Kind() == reflect.Slice {
-		switchType = switchType.Elem()
-		if switchType.Name() != "string" {
-			return false
-		}
-	}
-
-	switch name := switchType.Name(); name {
-	case "int":
-		return handleParseInt(input, t)
-	case "string":
-		return handleParseString(input, t)
-	case "float64":
-		return handleParseFloat(input, t)
+func parsePrimitive(input string, v reflect.Value, name string) bool {
+	switch name{
+	case intType:
+		return handleParseInt(input, v)
+	case stringType:
+		return handleParseString(input, v)
+	case float64Type:
+		return handleParseFloat(input, v)
 	default:
 		return false
 	}
@@ -65,12 +55,4 @@ func handleParseFloat(input string, v reflect.Value) bool {
 		v.Set(reflect.ValueOf(f))
 	}
 	return true
-}
-
-func getFieldName(sf reflect.StructField) string {
-	tag := sf.Tag.Get("sugar")
-	if tag == "" {
-		return sf.Name
-	}
-	return tag
 }
