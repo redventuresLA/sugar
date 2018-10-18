@@ -473,3 +473,39 @@ func TestParseValues13_1(t *testing.T) {
 		t.Error("The fields were parsed incorrectly")
 	}
 }
+
+func TestParseValues13_2(t *testing.T) {
+	output := testType13{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "1,2.2,3",
+	})
+	result := sugar.ParseValues(input, &output)
+	if !result.HasError() {
+		t.Error("should have error")
+	}
+}
+
+type testType14 struct {
+	Field1 []float64 `sugar:"field_1"`
+}
+
+func (tt testType14) Validate() []sugar.ValidationError {
+	return nil
+}
+
+func TestParseValues14_1(t *testing.T) {
+	output := testType14{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "1.2,2.4,3",
+	})
+	result := sugar.ParseValues(input, &output)
+	if result.HasError() {
+		t.Error("should not have error")
+	}
+	if len(output.Field1) != 3 {
+		t.Error("Invalid response")
+	}
+	if output.Field1[0] != 1.2 || output.Field1[1] != 2.4 || output.Field1[2] != 3 {
+		t.Error("The fields were parsed incorrectly")
+	}
+}
