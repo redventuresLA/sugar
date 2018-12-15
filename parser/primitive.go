@@ -14,6 +14,8 @@ func parsePrimitive(input string, v reflect.Value, name string) bool {
 		return handleParseString(input, v)
 	case float64Type:
 		return handleParseFloat(input, v)
+	case boolType:
+		return handleParseBool(input, v)
 	default:
 		return false
 	}
@@ -53,6 +55,19 @@ func handleParseFloat(input string, v reflect.Value) bool {
 		v.Set(reflect.ValueOf(&f))
 	} else {
 		v.Set(reflect.ValueOf(f))
+	}
+	return true
+}
+
+func handleParseBool(input string, v reflect.Value) bool {
+	b, e := strconv.ParseBool(input)
+	if e != nil {
+		return false
+	}
+	if v.Kind() == reflect.Ptr {
+		v.Set(reflect.ValueOf(&b))
+	} else {
+		v.Set(reflect.ValueOf(b))
 	}
 	return true
 }
