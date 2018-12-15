@@ -15,6 +15,8 @@ func parseSlice(input string, v reflect.Value, name string) bool {
 		return handleParseStringSlice(split, v)
 	case float64Type:
 		return handleParseFloatSlice(split, v)
+	case boolType:
+		return handleBoolSlice(split, v)
 	default:
 		return false
 	}
@@ -50,6 +52,20 @@ func handleParseIntSlice(input []string, v reflect.Value) bool {
 		}
 	}
 
+	v.Set(reflect.ValueOf(output))
+	return true
+}
+
+func handleBoolSlice(input []string, v reflect.Value) bool {
+	output := make([]bool, len(input))
+
+	for idx, val := range input {
+		if parsed, err := strconv.ParseBool(val); err == nil {
+			output[idx] = parsed
+		} else {
+			return false
+		}
+	}
 	v.Set(reflect.ValueOf(output))
 	return true
 }
