@@ -509,3 +509,175 @@ func TestParseValues14_1(t *testing.T) {
 		t.Error("The fields were parsed incorrectly")
 	}
 }
+
+type testType15 struct {
+	Field1 bool `sugar:"field_1"`
+	Field2 bool `sugar:"field_2"`
+}
+
+func (tt1 testType15) Validate() []sugar.ValidationError {
+	return nil
+}
+
+func TestParseValues15_1(t *testing.T) {
+	output := testType15{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "false",
+		"field_2": "true",
+	})
+	result := sugar.ParseValues(input, &output)
+	if result.HasError() {
+		t.Error("Not expecting error from result")
+	}
+	if output.Field1 != false || output.Field2 != true {
+		t.Error("The parsing was incorrect", output.Field1, output.Field2)
+	}
+}
+
+type testType16 struct {
+	Field2 *bool `sugar:"field_2"`
+}
+
+func (tt1 testType16) Validate() []sugar.ValidationError {
+	return nil
+}
+
+func TestParseValues16_1(t *testing.T) {
+	output := testType16{}
+	input := GetUrlValues(map[string]string{
+		"field_2": "true",
+	})
+	result := sugar.ParseValues(input, &output)
+	if result.HasError() {
+		t.Error("Not expecting error from result")
+	}
+	if output.Field2 == nil || *output.Field2 != true {
+		t.Error("The parsing was incorrect", output.Field2)
+	}
+}
+
+func TestParseValues16_2(t *testing.T) {
+	output := testType16{}
+	input := GetUrlValues(map[string]string{})
+	result := sugar.ParseValues(input, &output)
+	if result.HasError() {
+		t.Error("Not expecting error from result")
+	}
+	if output.Field2 != nil {
+		t.Error("The parsing was incorrect", output.Field2)
+	}
+}
+
+type testType17 struct {
+	Field1 bool `sugar:"field_1"`
+}
+
+func (tt testType17) Validate() []sugar.ValidationError {
+	return nil
+}
+
+func TestParseValues17_1(t *testing.T) {
+	output := testType17{}
+	input := GetUrlValues(map[string]string{})
+	result := sugar.ParseValues(input, &output)
+	if !result.HasError() {
+		t.Error("Did not have error")
+		return
+	}
+	if result.HumanReadableError() == nil {
+		t.Error("Did not have human readable error")
+		return
+	}
+	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 1 {
+		t.Error("Error counts were not right", result.ExtraFieldErrors, result.ValidationErrors, result.ParseErrors)
+		return
+	}
+	e := result.ParseErrors[0]
+	if e.Field != "field_1" || e.Reason != sugar.FieldMissingID {
+		t.Error("Error was wrong type")
+	}
+}
+
+func TestParseValues17_2(t *testing.T) {
+	output := testType7{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "something",
+	})
+	result := sugar.ParseValues(input, &output)
+	if !result.HasError() {
+		t.Error("Did not have error")
+		return
+	}
+	if result.HumanReadableError() == nil {
+		t.Error("Did not have human readable error")
+		return
+	}
+	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 1 {
+		t.Error("Error counts were not right", result.ExtraFieldErrors, result.ValidationErrors, result.ParseErrors)
+		return
+	}
+	e := result.ParseErrors[0]
+	if e.Field != "field_1" || e.Reason != sugar.ValidateFailedID {
+		t.Error("Error was wrong type")
+	}
+}
+
+func TestParseValues17_3(t *testing.T) {
+	output := testType7{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "4.223",
+	})
+	result := sugar.ParseValues(input, &output)
+	if !result.HasError() {
+		t.Error("Did not have error")
+		return
+	}
+	if result.HumanReadableError() == nil {
+		t.Error("Did not have human readable error")
+		return
+	}
+	if len(result.ExtraFieldErrors) != 0 || len(result.ValidationErrors) != 0 || len(result.ParseErrors) != 1 {
+		t.Error("Error counts were not right", result.ExtraFieldErrors, result.ValidationErrors, result.ParseErrors)
+		return
+	}
+	e := result.ParseErrors[0]
+	if e.Field != "field_1" || e.Reason != sugar.ValidateFailedID {
+		t.Error("Error was wrong type")
+	}
+}
+
+type testType18 struct {
+	Field1 []bool `sugar:"field_1"`
+}
+
+func (tt testType18) Validate() []sugar.ValidationError {
+	return nil
+}
+
+func TestParseValues18_1(t *testing.T) {
+	output := testType18{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "false,true,false",
+	})
+	result := sugar.ParseValues(input, &output)
+	if result.HasError() {
+		t.Error("should not have error")
+	}
+	if len(output.Field1) != 3 {
+		t.Error("Invalid response")
+	}
+	if output.Field1[0] != false || output.Field1[1] != true || output.Field1[2] != false {
+		t.Error("The fields were parsed incorrectly")
+	}
+}
+
+func TestParseValue18_2(t *testing.T) {
+	output := testType18{}
+	input := GetUrlValues(map[string]string{
+		"field_1": "false,2.2,true",
+	})
+	result := sugar.ParseValues(input, &output)
+	if !result.HasError() {
+		t.Error("should have error")
+	}
+}
