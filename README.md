@@ -6,4 +6,4 @@
 
 A parser for HTTP body and query parameters
 
-This is deprecated in favor of import "github.com/gorilla/schema"
+This is deprecated in favor of http://www.gorillatoolkit.org/pkg/schema
